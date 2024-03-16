@@ -3,7 +3,7 @@ export const mongooseConnect = async()=> {
     try{
         if(process.env.DATABASE_URL){
             
-       await mongoose.connect('mongodb://localhost:27017/blog')
+       await mongoose.connect(process.env.DATABASE_URL)
        console.log('Connected Successfully');
         }
        
