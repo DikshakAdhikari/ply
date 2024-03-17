@@ -1,11 +1,9 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import userRouter from './routes/user'
-
-import blogRouter from './routes/blog'
 import cors from 'cors'
-import commentRouter from './routes/comment'
 import { mongooseConnect } from './connection/connect'
+import productRouter from './routes/productRoute'
 dotenv.config()
 
 
@@ -24,8 +22,7 @@ app.use(express.json())
 app.use(express.static('public')) 
 
 app.use('/user',userRouter)
-app.use('/blog',blogRouter)
-app.use('/comment', commentRouter)
+app.use('/product', productRouter)
 app.use('/', (req,res)=> {
   res.json({message:"Hello baby"})
 })

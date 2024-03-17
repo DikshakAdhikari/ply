@@ -1,15 +1,23 @@
 import mongoose, { Schema } from "mongoose";
 
-const blogSchema= new mongoose.Schema({ //added
-    imageUrl:{
+const productSchema= new mongoose.Schema({ 
+    productName:{
         type:String,
         required:false
     },
-    title:{
+    price:{
         type:String,
         required:true
     },
-    description:{
+    image:{
+        type:String,
+        required:true
+    },
+    productDescription:{
+        type:String,
+        required:true
+    },
+    department:{
         type:String,
         required:true
     },
@@ -21,5 +29,5 @@ const blogSchema= new mongoose.Schema({ //added
 },{timestamps:true})
 
 
-const blog= mongoose.model('blog',blogSchema)
-export default blog
+const product= mongoose.model('product',productSchema)
+export default product
