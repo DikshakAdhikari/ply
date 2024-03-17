@@ -8,8 +8,16 @@ const reviewsSchema= new mongoose.Schema({
     },
     author: {
         type: {
-          name: String,
-          email: String
+          productName: String,
+          price: String,
+          image:String,
+          productDescription:String,
+          department:String,
+          createdBy:{
+            type: Schema.Types.ObjectId,
+            ref:'user',
+            required:true 
+         }
         },
         required: true
       },
@@ -19,3 +27,6 @@ const reviewsSchema= new mongoose.Schema({
         required:false 
     }
 })
+
+const review= mongoose.model('review',reviewsSchema)
+export default review
