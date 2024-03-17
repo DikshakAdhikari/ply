@@ -2,6 +2,7 @@ import express from 'express'
 import { verifyJwt } from '../middlewares/veriftJwt'
 import { putObject } from '../services/aws-client'
 import product from '../models/product'
+import restrictTo from '../services/authorization'
 const productRouter= express.Router()
 
 
@@ -26,7 +27,7 @@ productRouter.get('/', async (req,res)=> {
 })
 
 
-productRouter.put('/update/:productId', verifyJwt, async (req,res)=> {
+productRouter.put('/update/:productId', verifyJwt, restrictTo(["ADMIN"]) , async (req,res)=> {
     try{
         const {productName, price, productDescription, department, filename}= req.body   
    
@@ -45,7 +46,19 @@ productRouter.put('/update/:productId', verifyJwt, async (req,res)=> {
     }catch(err){
         res.status(403).json
     }
+});
+
+
+productRouter.get('/:productId', async (req,res)=> {
+    try{
+        const productOne= await product.findOne({_id:req.params.productId})
+        res.json(productOne)
+    }catch(err){
+        res.status(403).json(err)
+    }
 })
+
+
 
 
 productRouter.get('/userProduct', verifyJwt, async(req,res)=> {
@@ -56,15 +69,6 @@ productRouter.get('/userProduct', verifyJwt, async(req,res)=> {
     }catch(err){
         res.status(403).json(err)
 
-    }
-})
-
-productRouter.get('/user/:productId', async (req,res)=> {
-    try{
-        const userName= await product.findOne({_id:req.params.productId}).populate('createdBy')
-        res.json(userName)
-    }catch(err){
-        res.status(403).json(err)
     }
 })
 

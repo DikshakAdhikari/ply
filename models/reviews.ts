@@ -6,6 +6,15 @@ const reviewsSchema= new mongoose.Schema({
         enum:['pending','approved','reject'],
         required:true
     },
+    productId:{
+      type:String,
+      required:true
+    },
+    authorId: {
+      type: Schema.Types.ObjectId,
+      ref:'user',
+      required:false 
+  },
     author: {
         type: {
           productName: String,
@@ -14,9 +23,7 @@ const reviewsSchema= new mongoose.Schema({
           productDescription:String,
           department:String,
           createdBy:{
-            type: Schema.Types.ObjectId,
-            ref:'user',
-            required:true 
+            type: String
          }
         },
         required: true
