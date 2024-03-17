@@ -30,6 +30,24 @@ reviewsRouter.get('/profile/my-submissions', verifyJwt, restrictTo(['NORMAL']), 
     }catch(err){
         res.json(err)
     }
+});
+
+reviewsRouter.get('/pending-requests', verifyJwt, restrictTo(['ADMIN']), async (req, res)=> {
+    try{
+        const pending= await review.find({status:"pending"});
+        res.json(pending);
+    }catch(err){
+        res.json(err);
+    }
+})
+
+reviewsRouter.get('/pending-requests/:request_id', verifyJwt, restrictTo(['ADMIN']), async (req,res)=> {
+    try{
+        const requestWithId= await review.find({ $and:[{productId:req.params.request_id}, {status:"pending"}]});
+        res.json(requestWithId);
+    }catch(err){
+        res.json(err)
+    }
 })
 
 export default reviewsRouter
