@@ -8,6 +8,7 @@ const userRouter= express.Router()
 userRouter.post('/' , async (req, res)=> {
     try{
         const {fullName, email, password, role} = req.body
+        
         const isUserExists = await user.findOne({fullName, email})
         if(isUserExists){ 
             return res.json('User already exists!')

@@ -39,7 +39,7 @@ const userSchema= new mongoose.Schema<IUser,UserModel>({
     role:{
         type:String,
         enum:['NORMAL','ADMIN'],
-        default:'NORMAL'
+        required:true
     
     },
     salt:{

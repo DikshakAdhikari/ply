@@ -39,7 +39,18 @@ productRouter.post('/picture' , async (req,res)=> {
     }catch(err){
         res.json(err)
     }
-} )
+} );
+
+productRouter.get('/', async (req,res)=> {
+    try{
+        const data= await product.find({});
+        res.json(data)
+
+    }catch(err){
+        console.log(err);
+        
+    }
+})
 
 
 productRouter.put('/update/:productId', verifyJwt, async (req,res)=> {
@@ -60,7 +71,6 @@ productRouter.put('/update/:productId', verifyJwt, async (req,res)=> {
                 createdBy: UserId,
                 image: img
             } );
-            console.log(updateProduct);
             
             res.json('product updated successfully!')
     }catch(err){
