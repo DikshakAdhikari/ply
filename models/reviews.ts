@@ -3,17 +3,18 @@ import mongoose, { Schema } from "mongoose";
 const reviewsSchema= new mongoose.Schema({
     status:{
         type:String,
-        enum:['pending','approved','reject'],
+        enum:['pending','approve','reject'],
         required:true
     },
-    productId:{
-      type:String,
-      required:true
-    },
+    productId: {
+      type: Schema.Types.ObjectId,
+      ref:'product',
+      required:true 
+  },
     authorId: {
       type: Schema.Types.ObjectId,
       ref:'user',
-      required:false 
+      required:true 
   },
     author: {
         type: {
@@ -22,9 +23,6 @@ const reviewsSchema= new mongoose.Schema({
           image:String,
           productDescription:String,
           department:String,
-          createdBy:{
-            type: String
-         }
         },
         required: true
       },

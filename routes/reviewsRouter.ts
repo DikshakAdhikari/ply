@@ -6,13 +6,12 @@ import restrictTo from '../services/authorization';
 const reviewsRouter= express.Router()
 reviewsRouter.post('/', verifyJwt, async(req,res)=> {
     try{
-        const { obj , status, adminId, productId }= req.body;
-        // console.log(obj);
+        const { obj , status, productId }= req.body;
         const ress= await review.insertMany({
             author:obj,
             status,
             //@ts-ignore
-            adminId:req.userId,
+            authorId:req.headers["userId"],
             productId
         })
         res.json("saved successfully")     ;
@@ -34,7 +33,7 @@ reviewsRouter.get('/profile/my-submissions', verifyJwt, restrictTo(['NORMAL']), 
 
 reviewsRouter.get('/pending-requests', verifyJwt, restrictTo(['ADMIN']), async (req, res)=> {
     try{
-        const pending= await review.find({status:"pending"});
+        const pending= await review.find({status:"pending"}).populate("productId")
         res.json(pending);
     }catch(err){
         res.json(err);
@@ -43,8 +42,20 @@ reviewsRouter.get('/pending-requests', verifyJwt, restrictTo(['ADMIN']), async (
 
 reviewsRouter.get('/pending-requests/:request_id', verifyJwt, restrictTo(['ADMIN']), async (req,res)=> {
     try{
-        const requestWithId= await review.find({ $and:[{productId:req.params.request_id}, {status:"pending"}]});
+        const requestWithId= await review.findOne({ $and:[{_id:req.params.request_id}, {status:"pending"}]});
         res.json(requestWithId);
+    }catch(err){
+        res.json(err)
+    }
+})
+
+reviewsRouter.put('/update/:id', verifyJwt, restrictTo(['ADMIN']), async (req, res)=> {
+    try{
+        const {status} = req.body
+        const updateProduct = await review.findByIdAndUpdate(req.params.id ,{
+            status
+        } );
+        res.json(" Reviewed successfully! ")
     }catch(err){
         res.json(err)
     }

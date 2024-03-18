@@ -29,8 +29,9 @@ productRouter.get('/', async (req,res)=> {
 
 productRouter.put('/update/:productId', verifyJwt, restrictTo(["ADMIN"]) , async (req,res)=> {
     try{
-        const {productName, price, productDescription, department, filename}= req.body   
-   
+        const {productName, price, productDescription, department, filename}= req.body  
+        console.log(productName, price, productDescription, department, filename);
+         
         const UserId= req.headers['userId']
         const img = `https://s3.ap-south-1.amazonaws.com/blog.dikshak/uploads/profile-pic/image-${filename}`;
              const updateProduct = await product.findByIdAndUpdate(req.params.productId ,{
@@ -41,6 +42,8 @@ productRouter.put('/update/:productId', verifyJwt, restrictTo(["ADMIN"]) , async
                 createdBy: UserId,
                 image: img
             } );
+            console.log(updateProduct);
+            
             
             res.json('product updated successfully!')
     }catch(err){
@@ -48,6 +51,31 @@ productRouter.put('/update/:productId', verifyJwt, restrictTo(["ADMIN"]) , async
     }
 });
 
+productRouter.put('/update/admin/:productId', verifyJwt, restrictTo(["ADMIN"]) , async (req,res)=> {
+    try{
+        console.log(req.params.productId);
+        
+        const {productName, price, productDescription, department, image, filename}= req.body  
+        console.log(productName, price, productDescription, department, filename);
+         
+        const UserId= req.headers['userId']
+        const img = `https://s3.ap-south-1.amazonaws.com/blog.dikshak/uploads/profile-pic/image-${filename}`;
+             const updateProduct = await product.findByIdAndUpdate(req.params.productId ,{
+                productName: productName,
+                 price: price,
+                  productDescription :productDescription,
+                department:department,
+                createdBy: UserId,
+                image: image
+            } );
+            console.log(updateProduct);
+            
+            
+            res.json('product updated successfully!')
+    }catch(err){
+        res.status(403).json
+    }
+});
 
 productRouter.get('/:productId', async (req,res)=> {
     try{

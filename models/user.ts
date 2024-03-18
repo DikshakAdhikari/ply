@@ -16,16 +16,7 @@ interface UserModel extends Model<IUser> {
 }
 
 const userSchema= new mongoose.Schema<IUser,UserModel>({
-    imageUrl:{
-        type:String,
-        required:false,
-    
-    },
-    fullName:{
-        type:String,
-        required:true,
 
-    },
     email:{
         type:String,
         required:true,
@@ -60,7 +51,6 @@ userSchema.pre<IUser>('save', function (next){
     this.salt = secret
     this.password = hashedPassword
     if (!this.imageUrl || this.imageUrl.trim() === '') {
-        // Set default image
         this.imageUrl = DEFAULT_IMAGE;
       }
     next()

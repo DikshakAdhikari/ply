@@ -7,14 +7,14 @@ const userRouter= express.Router()
 
 userRouter.post('/' , async (req, res)=> {
     try{
-        const {fullName, email, password, role} = req.body
+        const { email, password, role} = req.body
         
-        const isUserExists = await user.findOne({fullName, email})
+        const isUserExists = await user.findOne({ email})
         if(isUserExists){ 
             return res.json('User already exists!')
         }
         const data= await user.create({
-            fullName , email, password, role
+          email, password, role
         })
         data.save()
         res.json('User created successfully!')
@@ -31,8 +31,8 @@ userRouter.post('/signin', async (req, res)=> {
             return res.status(403).json('Such user does not exists!')
         }
         const token = await user.matchPasswordAndGiveToken(isValidUser._id, email ,isValidUser.role, password)     
-    
-         res.json(token)
+        
+         res.json({token, userId: isValidUser._id, role:isValidUser.role})
     }catch(err){
         res.status(403).json(err)
     }
